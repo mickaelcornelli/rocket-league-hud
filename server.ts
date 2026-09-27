@@ -89,46 +89,55 @@ async function bootstrap() {
     }
   );
 
-  wss.on(
-    "connection",
-    (ws) => {
+  const BROADCAST_INTERVAL_MS = 100; // 10 fps, ajustable si besoin
+
+const hudClients = new Set<WebSocket>();
+
+const broadcastState = () => {
+  if (hudClients.size === 0) {
+    return;
+  }
+
+  const payload = JSON.stringify({
+    type: "state",
+    data: rocketLeague.state.getState(),
+  });
+
+  for (const client of hudClients) {
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(payload);
+    }
+  }
+};
+
+setInterval(broadcastState, BROADCAST_INTERVAL_MS);
+
+wss.on(
+  "connection",
+  (ws) => {
+    console.log(
+      "[Browser] HUD connected"
+    );
+
+    hudClients.add(ws);
+
+    // Envoi immédiat pour ne pas attendre le premier tick de l'interval
+    ws.send(
+      JSON.stringify({
+        type: "state",
+        data: rocketLeague.state.getState(),
+      })
+    );
+
+    ws.on("close", () => {
       console.log(
-        "[Browser] HUD connected"
+        "[Browser] HUD disconnected"
       );
 
-      const sendState = () => {
-        if (
-          ws.readyState !==
-          WebSocket.OPEN
-        ) {
-          return;
-        }
-
-        ws.send(
-          JSON.stringify({
-            type: "state",
-            data:
-              rocketLeague.state.getState(),
-          })
-        );
-      };
-
-      sendState();
-
-      const unsubscribe =
-        rocketLeague.state.onState(
-          sendState
-        );
-
-      ws.on("close", () => {
-        console.log(
-          "[Browser] HUD disconnected"
-        );
-
-        unsubscribe();
-      });
-    }
-  );
+      hudClients.delete(ws);
+    });
+  }
+);
 
   httpServer.listen(
     port,

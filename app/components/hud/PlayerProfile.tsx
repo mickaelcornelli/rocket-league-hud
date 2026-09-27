@@ -2,6 +2,7 @@
 
 import { RocketLeaguePlayer } from "@/app/lib/rocket-league/types";
 import PlayerStats from "./PlayerStats";
+import PlayerRank from "./PlayerRank";
 
 interface PlayerProfileProps {
   player: RocketLeaguePlayer;
@@ -110,16 +111,18 @@ export default function PlayerProfile({
           <PlayerStats player={player} />
         </div>
 
-        <div className="relative z-10 mt-6 rounded-xl border border-dashed border-white/8 bg-white/2 p-4">
+        <div className="relative z-10 mt-6 rounded-xl border border-white/8 bg-white/2 p-4">
           <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-[#6872D9]">
-            External profile
+            Rank
           </div>
 
-          <p className="mt-2 text-sm leading-relaxed text-[#8A8F98]">
-            Les données de rang, MMR et historique seront
-            disponibles lorsque le service de profil externe
-            sera intégré.
-          </p>
+          {isBot ? (
+            <p className="mt-2 text-sm leading-relaxed text-[#8A8F98]">
+              Pas de données de rang pour les bots.
+            </p>
+          ) : (
+            <PlayerRank primaryId={player.PrimaryId} />
+          )}
         </div>
 
         <div className="relative z-10 mt-6 border-t border-white/6 pt-4">
