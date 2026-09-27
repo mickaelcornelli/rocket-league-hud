@@ -51,38 +51,38 @@ async function bootstrap() {
 
   const rocketLeague =
     getRocketLeagueService();
+ 
+  httpServer.on(
+    "upgrade",
+    (request, socket, head) => {
+      const { pathname } =
+        parse(request.url ?? "");
 
-    httpServer.on(
-      "upgrade",
-      (request, socket, head) => {
-          const { pathname } =
-              parse(request.url ?? "");
-  
-          console.log(
-              `[HTTP] WebSocket upgrade: ${pathname}`
-          );
-  
-          if (pathname !== "/rl") {
-              return;
-          }
-  
-          wss.handleUpgrade(
-              request,
-              socket,
-              head,
-              (ws) => {
-                  console.log(
-                      "[Browser] HUD WebSocket connected"
-                  );
-  
-                  wss.emit(
-                      "connection",
-                      ws,
-                      request
-                  );
-              }
-          );
+      console.log(
+        `[HTTP] WebSocket upgrade: ${pathname}`
+      );
+
+      if (pathname !== "/rl") {
+        return;
       }
+
+      wss.handleUpgrade(
+        request,
+        socket,
+        head,
+        (ws) => {
+          console.log(
+            "[Browser] HUD WebSocket connected"
+          );
+
+          wss.emit(
+            "connection",
+            ws,
+            request
+          );
+        }
+      );
+    }
   );
 
   wss.on(

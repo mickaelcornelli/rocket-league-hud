@@ -3,8 +3,6 @@
 import { useEffect, useState } from "react";
 import { MatchState } from "./lib/rocket-league/state";
 
-
-
 export default function Home() {
   const [state, setState] = useState<MatchState | null>(null);
 
