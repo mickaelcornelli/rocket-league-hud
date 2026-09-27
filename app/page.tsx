@@ -2,302 +2,171 @@
 
 import { useEffect, useState } from "react";
 import { MatchState } from "./lib/rocket-league/state";
+import MatchHud from "./components/hud/MatchHud";
 
-export default function Home() {
-  const [state, setState] = useState<MatchState | null>(null);
+const WEBSOCKET_URL =
+  "ws://127.0.0.1:3000/rl";
 
-  const [wsConnected, setWsConnected] =
+export default function HudPage() {
+  const [state, setState] =
+    useState<MatchState | null>(null);
+
+  const [socketConnected, setSocketConnected] =
     useState(false);
 
   useEffect(() => {
-    const socket = new WebSocket(
-      "ws://127.0.0.1:3000/rl"
-    );
+    let socket: WebSocket | null = null;
 
-    socket.onopen = () => {
-      console.log(
-        "[HUD] Connected to backend"
-      );
+    let reconnectTimer:
+      | ReturnType<typeof setTimeout>
+      | null = null;
 
-      setWsConnected(true);
-    };
+    let stopped = false;
 
-    socket.onmessage = (event) => {
-      try {
-        const message =
-          JSON.parse(event.data);
-
-        if (message.type === "state") {
-          setState(message.data);
-        }
-      } catch (error) {
-        console.error(
-          "[HUD] Invalid message",
-          error
-        );
+    const clearReconnectTimer = () => {
+      if (reconnectTimer !== null) {
+        clearTimeout(reconnectTimer);
+        reconnectTimer = null;
       }
     };
 
-    socket.onclose = () => {
+    const connect = () => {
+      if (stopped) {
+        return;
+      }
+
       console.log(
-        "[HUD] Backend disconnected"
+        "[HUD] Connecting to backend..."
       );
 
-      setWsConnected(false);
+      socket = new WebSocket(WEBSOCKET_URL);
+
+      socket.onopen = () => {
+        console.log(
+          "[HUD] WebSocket connected"
+        );
+
+        setSocketConnected(true);
+      };
+
+      socket.onmessage = (event) => {
+        try {
+          const message = JSON.parse(
+            event.data
+          ) as {
+            type?: string;
+            data?: MatchState;
+          };
+
+          if (
+            message.type !== "state" ||
+            !message.data
+          ) {
+            return;
+          }
+
+          setState(message.data);
+        } catch (error) {
+          console.error(
+            "[HUD] Invalid WebSocket message:",
+            error
+          );
+        }
+      };
+
+      socket.onerror = (error) => {
+        console.error(
+          "[HUD] WebSocket error:",
+          error
+        );
+      };
+
+      socket.onclose = () => {
+        console.log(
+          "[HUD] WebSocket disconnected"
+        );
+
+        setSocketConnected(false);
+
+        if (stopped) {
+          return;
+        }
+
+        clearReconnectTimer();
+
+        reconnectTimer = setTimeout(() => {
+          reconnectTimer = null;
+          connect();
+        }, 3000);
+      };
     };
 
-    socket.onerror = () => {
-      console.error(
-        "[HUD] WebSocket connection failed"
-      );
-    };
+    connect();
 
     return () => {
-      socket.close();
+      stopped = true;
+
+      clearReconnectTimer();
+
+      socket?.close();
+      socket = null;
     };
   }, []);
 
-  const formatTime = (
-    seconds: number
-  ) => {
-    const minutes =
-      Math.floor(seconds / 60);
+  if (!state) {
+    return (
+      <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#050506] text-[#EDEDEF]">
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,#0a0a0f_0%,#050506_50%,#020203_100%)]"
+        />
 
-    const remainingSeconds =
-      Math.floor(seconds % 60);
+        <div
+          aria-hidden="true"
+          className="absolute left-1/2 top-1/3 h-125 w-175 -translate-x-1/2 rounded-full bg-[#5E6AD2]/8 blur-[150px]"
+        />
 
-    return `${minutes}:${remainingSeconds
-      .toString()
-      .padStart(2, "0")}`;
-  };
+        <section className="relative z-10 w-full max-w-sm px-6 text-center">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-white/8 bg-white/4 shadow-[0_0_0_1px_rgba(255,255,255,0.02),0_0_40px_rgba(94,106,210,0.12)]">
+            <span className="text-lg font-semibold text-[#6872D9]">
+              RL
+            </span>
+          </div>
 
-  return (
-    <main
-      style={{
-        minHeight: "100vh",
-        background: "#111",
-        color: "#fff",
-        padding: "40px",
-        fontFamily: "Arial, sans-serif",
-      }}
-    >
-      <h1>
-        Rocket League HUD
-      </h1>
+          <h1 className="mt-6 bg-linear-to-b from-white via-white/95 to-white/60 bg-clip-text text-2xl font-semibold tracking-tight text-transparent">
+            Rocket League HUD
+          </h1>
 
-      <p>
-        Backend :{" "}
-        {wsConnected
-          ? "🟢 connecté"
-          : "🔴 déconnecté"}
-      </p>
+          <p className="mt-3 text-sm leading-relaxed text-[#8A8F98]">
+            Waiting for a connection to the local
+            match service.
+          </p>
 
-      <p>
-        Rocket League :{" "}
-        {state?.connected
-          ? "🟢 connecté"
-          : "🔴 déconnecté"}
-      </p>
+          <div className="mt-6 rounded-xl border border-white/6 bg-white/2.5 p-4">
+            <div className="flex items-center justify-center gap-2">
+              <span
+                className={`h-2 w-2 rounded-full ${
+                  socketConnected
+                    ? "bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.5)]"
+                    : "animate-pulse bg-[#6872D9]"
+                }`}
+              />
 
-      {!state?.matchGuid ? (
-        <p>
-          En attente d'un match...
-        </p>
-      ) : (
-        <>
-          <section
-            style={{
-              marginTop: 30,
-              padding: 20,
-              background: "#222",
-              borderRadius: 12,
-            }}
-          >
-            <h2>
-              Match
-            </h2>
-
-            <p>
-              Arena :{" "}
-              {state.game?.Arena}
-            </p>
-
-            <p>
-              Playlist :{" "}
-              {state.game?.PlaylistId}
-            </p>
-
-            <p>
-              Temps :{" "}
-              {formatTime(
-                state.game?.TimeSeconds ?? 0
-              )}
-            </p>
-
-            <p>
-              Overtime :{" "}
-              {state.game?.bOvertime
-                ? "Oui"
-                : "Non"}
-            </p>
-
-            <p
-              style={{
-                fontSize: 12,
-                opacity: 0.5,
-              }}
-            >
-              MatchGuid :{" "}
-              {state.matchGuid}
-            </p>
-          </section>
-
-          <section
-            style={{
-              marginTop: 30,
-              display: "flex",
-              gap: 20,
-            }}
-          >
-            {state.game?.Teams.map(
-              (team) => (
-                <div
-                  key={
-                    team.TeamNum
-                  }
-                  style={{
-                    flex: 1,
-                    padding: 30,
-                    background:
-                      "#222",
-                    borderRadius:
-                      12,
-                    textAlign:
-                      "center",
-                  }}
-                >
-                  <h2>
-                    {team.Name}
-                  </h2>
-
-                  <div
-                    style={{
-                      fontSize: 48,
-                      fontWeight:
-                        "bold",
-                    }}
-                  >
-                    {
-                      team.Score
-                    }
-                  </div>
-                </div>
-              )
-            )}
-          </section>
-
-          <section
-            style={{
-              marginTop: 30,
-            }}
-          >
-            <h2>
-              Joueurs
-            </h2>
-
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns:
-                  "repeat(2, 1fr)",
-                gap: 15,
-              }}
-            >
-              {state.players.map(
-                (player) => (
-                  <div
-                    key={`${player.PrimaryId}-${player.Shortcut}-${player.Name}`}
-                    style={{
-                      padding: 20,
-                      background: "#222",
-                      borderRadius: 12,
-                    }}
-                  >
-                    <h3>
-                      {
-                        player.Name
-                      }
-                    </h3>
-
-                    <p>
-                      Équipe :{" "}
-                      {
-                        player.TeamNum ===
-                          0
-                          ? "Bleu"
-                          : "Orange"
-                      }
-                    </p>
-
-                    <p>
-                      Score :{" "}
-                      {
-                        player.Score
-                      }
-                    </p>
-
-                    <p>
-                      Buts :{" "}
-                      {
-                        player.Goals
-                      }
-                    </p>
-
-                    <p>
-                      Tirs :{" "}
-                      {
-                        player.Shots
-                      }
-                    </p>
-
-                    <p>
-                      Saves :{" "}
-                      {
-                        player.Saves
-                      }
-                    </p>
-
-                    <p>
-                      Touches :{" "}
-                      {
-                        player.Touches
-                      }
-                    </p>
-
-                    <p>
-                      Boost :{" "}
-                      {
-                        player.Boost ??
-                        "-"
-                      }
-                    </p>
-
-                    <p>
-                      Vitesse :{" "}
-                      {player.Speed !==
-                        undefined
-                        ? player.Speed.toFixed(
-                          0
-                        )
-                        : "-"}
-                    </p>
-                  </div>
-                )
-              )}
+              <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[#8A8F98]">
+                {socketConnected
+                  ? "Connected · Waiting for data"
+                  : "Connecting to local server"}
+              </span>
             </div>
-          </section>
-        </>
-      )}
-    </main>
-  );
+
+            <div className="mt-3 font-mono text-[10px] text-[#8A8F98]">
+              ws://127.0.0.1:3000/rl
+            </div>
+          </div>
+        </section>
+      </main>
+    );
+  }
+
+  return <MatchHud state={state} />;
 }

@@ -44,6 +44,10 @@ async function bootstrap() {
       );
     });
 
+  /*httpServer.on("connection", (socket) => {
+    console.log("[DEBUG] TCP connection reçue, port local:", socket.localPort);
+  });*/
+
   const wss =
     new WebSocketServer({
       noServer: true,
@@ -51,7 +55,7 @@ async function bootstrap() {
 
   const rocketLeague =
     getRocketLeagueService();
- 
+
   httpServer.on(
     "upgrade",
     (request, socket, head) => {
