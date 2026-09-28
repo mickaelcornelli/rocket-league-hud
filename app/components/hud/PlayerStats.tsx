@@ -12,19 +12,19 @@ export default function PlayerStats({
 }: PlayerStatsProps) {
   const stats = [
     {
-      label: "Goals",
+      label: "Buts",
       value: player.Goals,
     },
     {
-      label: "Shots",
+      label: "Tirs",
       value: player.Shots,
     },
     {
-      label: "Assists",
+      label: "Passes",
       value: player.Assists,
     },
     {
-      label: "Saves",
+      label: "Arrêts",
       value: player.Saves,
     },
     {
@@ -32,7 +32,7 @@ export default function PlayerStats({
       value: player.Touches,
     },
     {
-      label: "Demos",
+      label: "Démos",
       value: player.Demos,
     },
   ];

@@ -40,7 +40,7 @@ export default function PlayerProfile({
         <div className="relative z-10 flex items-start justify-between gap-4">
           <div>
             <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#6872D9]">
-              Player profile
+              Profil du joueur
             </div>
 
             <h2
@@ -52,11 +52,11 @@ export default function PlayerProfile({
 
             <div className="mt-2 flex items-center gap-2">
               <span className="rounded-full border border-white/8 bg-white/4 px-2 py-1 font-mono text-[10px] text-[#8A8F98]">
-                {isBot ? "Bot" : "Player"}
+                {isBot ? "Bot" : "Joueur"}
               </span>
 
               <span className="font-mono text-[10px] text-[#8A8F98]">
-                Team {player.TeamNum + 1}
+                Equipe {player.TeamNum + 1}
               </span>
             </div>
           </div>
@@ -88,7 +88,7 @@ export default function PlayerProfile({
           />
 
           <ProfileMetric
-            label="Speed"
+            label="Vitesse"
             value={`${Math.round(player.Speed ?? 0)}`}
           />
 
@@ -98,14 +98,14 @@ export default function PlayerProfile({
           />
 
           <ProfileMetric
-            label="Shortcut"
+            label="Raccourci spectateur"
             value={String(player.Shortcut ?? "—")}
           />
         </div>
 
         <div className="relative z-10 mt-6">
           <div className="mb-3 font-mono text-[10px] uppercase tracking-[0.2em] text-[#8A8F98]">
-            Match statistics
+            Statistiques
           </div>
 
           <PlayerStats player={player} />
@@ -113,7 +113,7 @@ export default function PlayerProfile({
 
         <div className="relative z-10 mt-6 rounded-xl border border-white/8 bg-white/2 p-4">
           <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-[#6872D9]">
-            Rank
+            Rang
           </div>
 
           {isBot ? (
@@ -127,7 +127,7 @@ export default function PlayerProfile({
 
         <div className="relative z-10 mt-6 border-t border-white/6 pt-4">
           <div className="font-mono text-[9px] uppercase tracking-[0.16em] text-[#8A8F98]">
-            Primary ID
+            ID
           </div>
 
           <div className="mt-2 break-all font-mono text-[10px] leading-relaxed text-[#EDEDEF]">

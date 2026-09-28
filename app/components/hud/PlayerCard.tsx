@@ -38,9 +38,8 @@ export default function PlayerCard({
     <button
       type="button"
       onClick={() => onSelect(player)}
-      className="group relative w-full overflow-hidden rounded-xl border border-white/6 bg-linear-to-b from-white/6.5 to-white/2 p-4 text-left shadow-[0_0_0_1px_rgba(255,255,255,0.02),0_2px_20px_rgba(0,0,0,0.35),0_0_35px_rgba(0,0,0,0.15)] transition duration-300 ease-out hover:-translate-y-1 hover:border-white/12 hover:shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_8px_40px_rgba(0,0,0,0.5),0_0_60px_rgba(94,106,210,0.08)] focus:outline-none focus:ring-2 focus:ring-[#5E6AD2]/60 focus:ring-offset-2 focus:ring-offset-[#050506]"
+      className="group relative w-full overflow-hidden cursor-pointer rounded-xl border border-white/6 bg-linear-to-b from-white/6.5 to-white/2 p-4 text-left shadow-[0_0_0_1px_rgba(255,255,255,0.02),0_2px_20px_rgba(0,0,0,0.35),0_0_35px_rgba(0,0,0,0.15)] transition duration-300 ease-out hover:-translate-y-1 hover:border-white/12 hover:shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_8px_40px_rgba(0,0,0,0.5),0_0_60px_rgba(94,106,210,0.08)] focus:outline-none focus:ring-2 focus:ring-[#5E6AD2]/60 focus:ring-offset-2 focus:ring-offset-[#050506]"
     >
-      {/* Accent top line */}
       <div
         aria-hidden="true"
         className="absolute inset-x-0 top-0 h-px opacity-70"
@@ -139,7 +138,7 @@ export default function PlayerCard({
       <div className="mt-4 flex items-center justify-between border-t border-white/6 pt-3">
         <div className="flex items-center gap-2">
           <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-[#8A8F98]">
-            Speed
+            Vitesse
           </span>
 
           <span className="font-mono text-xs text-[#EDEDEF]">
@@ -148,7 +147,7 @@ export default function PlayerCard({
         </div>
 
         <span className="text-[10px] text-[#8A8F98] transition-colors group-hover:text-[#6872D9]">
-          View profile →
+          Voir le profil →
         </span>
       </div>
     </button>

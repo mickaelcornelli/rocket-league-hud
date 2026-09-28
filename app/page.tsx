@@ -75,7 +75,7 @@ export default function HudPage() {
       };
 
       socket.onerror = (error) => {
-        console.error(
+        console.log(
           "[HUD] WebSocket error:",
           error
         );

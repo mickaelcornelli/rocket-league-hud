@@ -68,7 +68,7 @@ export class RocketLeagueClient {
         });
 
         this.socket.on("error", (error) => {
-            console.error(
+            console.log(
                 "[RocketLeague] WebSocket error:",
                 error.message
             );

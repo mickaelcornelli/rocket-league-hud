@@ -94,24 +94,23 @@ export default function MatchHud({
               </div>
 
               <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#8A8F98]">
-                Match Intelligence
+                HUD Tracker
               </div>
             </div>
           </div>
 
           <div className="flex items-center gap-2 rounded-full border border-white/6 bg-white/[0.035] px-3 py-1.5">
             <span
-              className={`h-1.5 w-1.5 rounded-full ${
-                state.connected
-                  ? "bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.6)]"
-                  : "bg-red-400"
-              }`}
+              className={`h-1.5 w-1.5 rounded-full ${state.connected
+                ? "bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.6)]"
+                : "bg-red-400"
+                }`}
             />
 
             <span className="font-mono text-[10px] uppercase tracking-widest text-[#8A8F98]">
               {state.connected
-                ? "Live"
-                : "Offline"}
+                ? "En ligne"
+                : "Hors ligne"}
             </span>
           </div>
         </header>
@@ -122,7 +121,7 @@ export default function MatchHud({
             <div>
               <div className="mb-2 flex items-center gap-2">
                 <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#6872D9]">
-                  Current match
+                  Match en cours
                 </span>
 
                 <span className="h-px w-8 bg-[#5E6AD2]/40" />
@@ -135,17 +134,16 @@ export default function MatchHud({
               <p className="mt-2 text-sm text-[#8A8F98]">
                 {game
                   ? `Playlist ${game.PlaylistId}`
-                  : "Waiting for game data"}
+                  : "En attente des données du jeu"}
               </p>
             </div>
 
             <div className="flex flex-col items-start gap-2 sm:items-center">
               <div
-                className={`font-mono text-4xl font-semibold tracking-[-0.04em] sm:text-5xl ${
-                  game?.bOvertime
-                    ? "text-[#6872D9]"
-                    : "text-[#EDEDEF]"
-                }`}
+                className={`font-mono text-4xl font-semibold tracking-[-0.04em] sm:text-5xl ${game?.bOvertime
+                  ? "text-[#6872D9]"
+                  : "text-[#EDEDEF]"
+                  }`}
               >
                 {game
                   ? game.bOvertime
@@ -163,7 +161,7 @@ export default function MatchHud({
 
             <div className="lg:text-right">
               <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#8A8F98]">
-                Match ID
+                ID du match
               </div>
 
               <div className="mt-2 max-w-65 truncate font-mono text-xs text-[#EDEDEF]">
@@ -171,7 +169,7 @@ export default function MatchHud({
               </div>
 
               <div className="mt-2 text-xs text-[#8A8F98]">
-                {state.players.length} players detected
+                {state.players.length} joueurs détectés
               </div>
             </div>
           </div>
@@ -180,23 +178,23 @@ export default function MatchHud({
 
           <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
             <MatchMetric
-              label="Players"
+              label="Joueurs"
               value={String(state.players.length)}
             />
 
             <MatchMetric
-              label="Arena"
+              label="Map"
               value={game?.Arena ?? "—"}
             />
 
             <MatchMetric
               label="Overtime"
-              value={game?.bOvertime ? "Active" : "Inactive"}
+              value={game?.bOvertime ? "Actif" : "Inactif"}
             />
 
             <MatchMetric
               label="Replay"
-              value={game?.bReplay ? "Active" : "Inactive"}
+              value={game?.bReplay ? "Actif" : "Inactif"}
             />
           </div>
         </section>
@@ -221,29 +219,29 @@ export default function MatchHud({
           <div className="mb-4 flex items-end justify-between">
             <div>
               <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#6872D9]">
-                Live performance
+                Performance en direct
               </div>
 
               <h2 className="mt-1 text-xl font-semibold tracking-tight text-[#EDEDEF]">
-                Players
+                Joueurs
               </h2>
             </div>
 
             <div className="text-xs text-[#8A8F98]">
-              Select a player to inspect
+              Voir le profil du joueur
             </div>
           </div>
 
           <div className="grid gap-4 xl:grid-cols-2">
             <PlayerTeamSection
-              label="Blue team"
+              label="Equipe bleu"
               players={bluePlayers}
               variant="blue"
               onSelect={setSelectedPlayer}
             />
 
             <PlayerTeamSection
-              label="Orange team"
+              label="Equipe orange"
               players={orangePlayers}
               variant="orange"
               onSelect={setSelectedPlayer}
@@ -320,7 +318,7 @@ function PlayerTeamSection({
       <div className="space-y-3">
         {players.length === 0 ? (
           <div className="rounded-xl border border-dashed border-white/8 p-6 text-center text-sm text-[#8A8F98]">
-            No players detected
+            Aucun joueur détecté
           </div>
         ) : (
           players.map((player) => (

@@ -88,7 +88,7 @@ export default function TeamScore({
 
       <div className="relative z-10 mt-5 flex items-center justify-between border-t border-white/6 pt-4">
         <div className="text-xs text-[#8A8F98]">
-          {players.length} player
+          {players.length} joueur
           {players.length !== 1 ? "s" : ""}
         </div>
 
