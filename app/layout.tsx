@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Rocket League HUD",
-  description: "Application desktop de HUD temps réel pour Rocket League, connectée directement aux données du jeu via la Stats API officielle. Le projet utilise Next.js, React, TypeScript et WebSockets pour récupérer l’état des matchs, suivre les joueurs et afficher leurs statistiques en temps réel dans une interface destinée à évoluer vers un overlay en jeu.",
+  description: "Application desktop de HUD temps réel pour Rocket League, connectée directement aux données du jeu via la Stats API officielle. Le projet utilise Next.js, React, TypeScript et WebSockets pour récupérer l"état des matchs, suivre les joueurs et afficher leurs statistiques en temps réel dans une interface destinée à évoluer vers un overlay en jeu.",
   authors: [{ name: "Jesstixk" }, { name: "Alibaba" }],
 };
 
