@@ -128,7 +128,7 @@ export default function MatchHud({
               </div>
 
               <h1 className="bg-linear-to-b from-white via-white/95 to-white/60 bg-clip-text text-2xl font-semibold tracking-tight text-transparent sm:text-3xl">
-                {game?.Arena ?? "Waiting for match"}
+                {game?.Arena ?? "En attente de match"}
               </h1>
 
               <p className="mt-2 text-sm text-[#8A8F98]">
@@ -165,7 +165,7 @@ export default function MatchHud({
               </div>
 
               <div className="mt-2 max-w-65 truncate font-mono text-xs text-[#EDEDEF]">
-                {state.matchGuid ?? "Not available"}
+                {state.matchGuid ?? "Indisponible"}
               </div>
 
               <div className="mt-2 text-xs text-[#8A8F98]">

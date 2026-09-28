@@ -1,5 +1,3 @@
-// server/player-service.ts
-//
 // Enrichissement des joueurs avec des données de rang externes.
 // Indépendant du WebSocket Rocket League : l'identifiant utilisé partout
 // est le PrimaryId ("Steam|123|0", "Epic|456|0", ...).
@@ -90,7 +88,7 @@ const PARSE_BASE_URL =
 
 const PARSE_SNAPSHOT_VERSION = "7";
 
-const REQUEST_TIMEOUT_MS = 15000;
+const REQUEST_TIMEOUT_MS = 40000;
 
 // Chaque appel Parse.bot coûte un crédit : on garde les succès longtemps,
 // les erreurs (souvent temporaires) très peu.

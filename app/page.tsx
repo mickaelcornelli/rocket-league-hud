@@ -138,8 +138,7 @@ export default function HudPage() {
           </h1>
 
           <p className="mt-3 text-sm leading-relaxed text-[#8A8F98]">
-            Waiting for a connection to the local
-            match service.
+            En attente de connexion au service de connexion locale.
           </p>
 
           <div className="mt-6 rounded-xl border border-white/6 bg-white/2.5 p-4">
@@ -154,8 +153,8 @@ export default function HudPage() {
 
               <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[#8A8F98]">
                 {socketConnected
-                  ? "Connected · Waiting for data"
-                  : "Connecting to local server"}
+                  ? "Connecté · En attente de données"
+                  : "Connexion au serveur local"}
               </span>
             </div>
 
